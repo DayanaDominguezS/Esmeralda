@@ -1,4 +1,4 @@
-package com.HA.Esmeralda.domain;
+package com.HA.Esmeralda.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "marcaciones")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-public class Marcaciones {
+public class MarcacionesDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -35,7 +34,7 @@ public class Marcaciones {
     @Column
     private LocalDateTime horaMarcacion4;
 
-    public Marcaciones(LocalDateTime horaMarcacion1, LocalDateTime horaMarcacion2, LocalDateTime horaMarcacion3, LocalDateTime horaMarcacion4) {
+    public MarcacionesDto(LocalDateTime horaMarcacion1, LocalDateTime horaMarcacion2, LocalDateTime horaMarcacion3, LocalDateTime horaMarcacion4) {
         this.horaMarcacion1 = horaMarcacion1;
         this.horaMarcacion2 = horaMarcacion2;
         this.horaMarcacion3 = horaMarcacion3;

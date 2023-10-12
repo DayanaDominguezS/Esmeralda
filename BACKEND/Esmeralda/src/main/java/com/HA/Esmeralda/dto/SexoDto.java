@@ -1,4 +1,4 @@
-package com.HA.Esmeralda.domain;
+package com.HA.Esmeralda.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -13,15 +13,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "departamento")
+@Table(name = "sexo")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-public class Departamento {
+public class SexoDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column
-    private String nombreDepartamento;
+    private String nombreSexo;
 
-    public Departamento(String nombreDepartamento) {this.nombreDepartamento = nombreDepartamento;}
+    public SexoDto(String nombreSexo) {
+        this.nombreSexo = nombreSexo;
+    }
 }

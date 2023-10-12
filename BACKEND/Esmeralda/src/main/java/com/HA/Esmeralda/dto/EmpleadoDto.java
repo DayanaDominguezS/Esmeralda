@@ -1,4 +1,4 @@
-package com.HA.Esmeralda.domain;
+package com.HA.Esmeralda.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "empleado")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-public class Empleado {
+public class EmpleadoDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -32,21 +32,12 @@ public class Empleado {
     private String segundoApellido;
     @Column
     private LocalDate fechaNacimiento;
-    @Column (unique = true)
+    @Column
     private Long numeroDocIdentidad;
     @Column
     private String lugarExpDocIdentidad;
 
-    @Column (unique = true)
-    private String correoElectronico;
-
-    @Column
-    private String contrasena;
-
-    @Column
-    private String numeroCelular;
-
-    public Empleado(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, Long numeroDocIdentidad, String lugarExpDocIdentidad, String correoElectronico, String contrasena, String numeroCelular) {
+    public EmpleadoDto(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, Long numeroDocIdentidad, String lugarExpDocIdentidad) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.primerApellido = primerApellido;
@@ -54,9 +45,6 @@ public class Empleado {
         this.fechaNacimiento = fechaNacimiento;
         this.numeroDocIdentidad = numeroDocIdentidad;
         this.lugarExpDocIdentidad = lugarExpDocIdentidad;
-        this.correoElectronico = correoElectronico;
-        this.contrasena = contrasena;
-        this.numeroCelular = numeroCelular;
     }
 
 }

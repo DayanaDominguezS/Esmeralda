@@ -1,6 +1,12 @@
 package com.HA.Esmeralda.dto;
 
+import com.HA.Esmeralda.domain.Departamento;
+import com.HA.Esmeralda.domain.NivelEscolaridad;
+import com.HA.Esmeralda.domain.Sexo;
+import com.HA.Esmeralda.domain.TipoDocIdentidad;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,42 +16,28 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@Entity
-@Table(name = "empleado")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EmpleadoDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    @Column
     private String primerNombre;
-    @Column
     private String segundoNombre;
-    @Column
     private String primerApellido;
-    @Column
     private String segundoApellido;
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
-    @Column
-    private Long numeroDocIdentidad;
-    @Column
+    private String numeroDocIdentidad;
     private String lugarExpDocIdentidad;
-
-    public EmpleadoDto(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, Long numeroDocIdentidad, String lugarExpDocIdentidad) {
-        this.primerNombre = primerNombre;
-        this.segundoNombre = segundoNombre;
-        this.primerApellido = primerApellido;
-        this.segundoApellido = segundoApellido;
-        this.fechaNacimiento = fechaNacimiento;
-        this.numeroDocIdentidad = numeroDocIdentidad;
-        this.lugarExpDocIdentidad = lugarExpDocIdentidad;
-    }
+    private String correoElectronico;
+    private String contrasena;
+    private String numeroCelular;
+    private String departamento;
+    private String nivelEscolaridad;
+    private String sexo;
+    private String tipoDocIdentidad;
 
 }
 

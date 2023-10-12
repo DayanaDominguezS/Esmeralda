@@ -1,4 +1,4 @@
-package com.HA.Esmeralda.repository;
+package com.HA.Esmeralda.repositorio;
 
 public interface TurnoRepository {
 }

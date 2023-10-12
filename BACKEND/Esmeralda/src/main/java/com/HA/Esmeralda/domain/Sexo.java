@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,6 +25,9 @@ public class Sexo {
     private Long id;
     @Column
     private String nombreSexo;
+
+    @OneToMany(mappedBy = "sexo")
+    private Set<Empleado> empleados = new HashSet<>();
 
     public Sexo(String nombreSexo) {
         this.nombreSexo = nombreSexo;

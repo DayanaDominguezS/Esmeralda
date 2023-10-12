@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,6 +26,9 @@ public class TipoDocIdentidad {
 
     @Column
     private String nombreTipoDocIdentidad;
+
+    @OneToMany(mappedBy = "tipoDocIdentidad")
+    private Set<Empleado> empleados = new HashSet<>();
 
     public TipoDocIdentidad(String nombreTipoDocIdentidad) {
         this.nombreTipoDocIdentidad = nombreTipoDocIdentidad;

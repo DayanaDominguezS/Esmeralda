@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,6 +25,9 @@ public class NivelEscolaridad {
     private Long id;
     @Column
     private String nombreNivelEscolaridad;
+
+    @OneToMany(mappedBy = "nivelEscolaridad")
+    private Set<Empleado> empleados = new HashSet<>();
 
     public NivelEscolaridad(String nombreNivelEscolaridad) {
         this.nombreNivelEscolaridad = nombreNivelEscolaridad;

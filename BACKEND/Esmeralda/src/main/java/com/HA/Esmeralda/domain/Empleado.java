@@ -46,7 +46,23 @@ public class Empleado {
     @Column
     private String numeroCelular;
 
-    public Empleado(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, Long numeroDocIdentidad, String lugarExpDocIdentidad, String correoElectronico, String contrasena, String numeroCelular) {
+    @ManyToOne
+    @JoinColumn(name = "empleado_departamento_id")
+    private Departamento departamento;
+
+    @ManyToOne
+    @JoinColumn(name = "empleado_nivelEscolaridad_id")
+    private NivelEscolaridad nivelEscolaridad;
+
+    @ManyToOne
+    @JoinColumn(name = "empleado_sexo_id")
+    private Sexo sexo;
+
+    @ManyToOne
+    @JoinColumn(name = "empleado_tipoDocIdentidad_id")
+    private TipoDocIdentidad tipoDocIdentidad;
+
+    public Empleado(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, Long numeroDocIdentidad, String lugarExpDocIdentidad, String correoElectronico, String contrasena, String numeroCelular, Departamento departamento, NivelEscolaridad nivelEscolaridad, Sexo sexo, TipoDocIdentidad tipoDocIdentidad) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.primerApellido = primerApellido;
@@ -57,6 +73,10 @@ public class Empleado {
         this.correoElectronico = correoElectronico;
         this.contrasena = contrasena;
         this.numeroCelular = numeroCelular;
+        this.departamento = departamento;
+        this.nivelEscolaridad = nivelEscolaridad;
+        this.sexo = sexo;
+        this.tipoDocIdentidad = tipoDocIdentidad;
     }
 
 }

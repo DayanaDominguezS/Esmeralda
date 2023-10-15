@@ -26,8 +26,15 @@ public class Departamento {
     @Column
     private String nombreDepartamento;
 
+    @Column
+    private String descripcionDepartamento;
+
     @OneToMany(mappedBy = "departamento")
     private Set<Empleado> empleados = new HashSet<>();
 
-    public Departamento(String nombreDepartamento) {this.nombreDepartamento = nombreDepartamento;}
+    public Departamento(String nombreDepartamento, String descripcionDepartamento) {
+        this.nombreDepartamento = nombreDepartamento;
+        this.descripcionDepartamento = descripcionDepartamento;
+    }
+
 }

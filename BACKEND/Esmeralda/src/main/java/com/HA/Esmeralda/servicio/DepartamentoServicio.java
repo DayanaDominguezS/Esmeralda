@@ -28,9 +28,8 @@ public class DepartamentoServicio {
         Departamento departamento = mapper.convertValue(departamentoDto, Departamento.class);
 
         departamentoRepository.save(departamento);
-
         mensajeCrearDepartamento = Optional.of(
-                "El empleado con" + empleadoDto.getTipoDocIdentidad() + empleadoDto.getNumeroDocIdentidad()
+                "El departamento " + departamentoDto.getNombreDepartamento()
                         + " Se ha creado exitosamente");
 
         return mensajeCrearDepartamento;

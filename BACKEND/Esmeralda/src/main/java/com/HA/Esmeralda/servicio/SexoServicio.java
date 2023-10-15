@@ -1,8 +1,13 @@
 package com.HA.Esmeralda.servicio;
 
+import com.HA.Esmeralda.domain.Departamento;
 import com.HA.Esmeralda.domain.Empleado;
+import com.HA.Esmeralda.domain.Sexo;
+import com.HA.Esmeralda.dto.DepartamentoDto;
 import com.HA.Esmeralda.dto.EmpleadoDto;
+import com.HA.Esmeralda.dto.SexoDto;
 import com.HA.Esmeralda.repositorio.DepartamentoRepository;
+import com.HA.Esmeralda.repositorio.SexoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +23,19 @@ public class SexoServicio {
     private ObjectMapper mapper;
 
     @Autowired
-    private DepartamentoRepository departamentoRepository;
+    private SexoRepository sexoRepository;
 
-    public Optional<String> crearEmpleado (EmpleadoDto empleadoDto) {
-        Optional<String> mensajeCrearEmpleado = null;
+    public Optional<String> crearSexo (SexoDto sexoDto) {
+        Optional<String> mensajeCrearSexo = null;
 
-        Empleado empleado = mapper.convertValue(empleadoDto, Empleado.class);
-        Empleado empleadoConsulta = empleadoRepository.getByNumeroDocIdentidad(empleadoDto.getNumeroDocIdentidad()).get();
+        Sexo sexo = mapper.convertValue(sexoDto, Sexo.class);
 
-        empleado.setDepartamento(empleadoConsulta.getDepartamento());
-        empleado.setNivelEscolaridad(empleadoConsulta.getNivelEscolaridad());
-        empleado.setSexo(empleadoConsulta.getSexo());
-        empleado.setTipoDocIdentidad(empleadoConsulta.getTipoDocIdentidad());
-
-        empleadoRepository.save(empleado);
-
-        mensajeCrearEmpleado = Optional.of(
-                "El empleado con" + empleadoDto.getTipoDocIdentidad() + empleadoDto.getNumeroDocIdentidad()
+        sexoRepository.save(sexo);
+        mensajeCrearSexo = Optional.of(
+                "El sexo " + sexoDto.getNombreSexo()
                         + " Se ha creado exitosamente");
 
-        return mensajeCrearEmpleado;
+        return mensajeCrearSexo;
 
     }
 

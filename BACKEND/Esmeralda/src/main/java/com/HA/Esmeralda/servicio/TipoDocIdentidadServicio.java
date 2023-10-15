@@ -1,8 +1,13 @@
 package com.HA.Esmeralda.servicio;
 
 import com.HA.Esmeralda.domain.Empleado;
+import com.HA.Esmeralda.domain.Sexo;
+import com.HA.Esmeralda.domain.TipoDocIdentidad;
 import com.HA.Esmeralda.dto.EmpleadoDto;
+import com.HA.Esmeralda.dto.SexoDto;
+import com.HA.Esmeralda.dto.TipoDocIdentidadDto;
 import com.HA.Esmeralda.repositorio.DepartamentoRepository;
+import com.HA.Esmeralda.repositorio.TipoDocIdentidadRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +23,19 @@ public class TipoDocIdentidadServicio {
     private ObjectMapper mapper;
 
     @Autowired
-    private DepartamentoRepository departamentoRepository;
+    private TipoDocIdentidadRepository tipoDocIdentidadRepository;
 
-    public Optional<String> crearEmpleado (EmpleadoDto empleadoDto) {
-        Optional<String> mensajeCrearEmpleado = null;
+    public Optional<String> crearTipoDocIdentidad (TipoDocIdentidadDto tipoDocIdentidadDto) {
+        Optional<String> mensajeCrearTipoDocIdentidad = null;
 
-        Empleado empleado = mapper.convertValue(empleadoDto, Empleado.class);
-        Empleado empleadoConsulta = empleadoRepository.getByNumeroDocIdentidad(empleadoDto.getNumeroDocIdentidad()).get();
+        TipoDocIdentidad tipoDocIdentidad = mapper.convertValue(tipoDocIdentidadDto, TipoDocIdentidad.class);
 
-        empleado.setDepartamento(empleadoConsulta.getDepartamento());
-        empleado.setNivelEscolaridad(empleadoConsulta.getNivelEscolaridad());
-        empleado.setSexo(empleadoConsulta.getSexo());
-        empleado.setTipoDocIdentidad(empleadoConsulta.getTipoDocIdentidad());
-
-        empleadoRepository.save(empleado);
-
-        mensajeCrearEmpleado = Optional.of(
-                "El empleado con" + empleadoDto.getTipoDocIdentidad() + empleadoDto.getNumeroDocIdentidad()
+        tipoDocIdentidadRepository.save(tipoDocIdentidad);
+        mensajeCrearTipoDocIdentidad = Optional.of(
+                "El tipo de documento de identidad " + tipoDocIdentidadDto.getNombreTipoDocIdentidad()
                         + " Se ha creado exitosamente");
 
-        return mensajeCrearEmpleado;
+        return mensajeCrearTipoDocIdentidad;
 
     }
 

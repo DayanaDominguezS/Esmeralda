@@ -13,6 +13,6 @@ public interface TipoDocIdentidadRepository extends JpaRepository<TipoDocIdentid
 
     @Modifying
     @Transactional
-    void deleteByNombreNombreTipoDocIdentidad(String nombreTipoDocIdentidad);
+    void deleteByNombreTipoDocIdentidad(String nombreTipoDocIdentidad);
 
 }

@@ -33,7 +33,7 @@ public class Empleado {
     @Column
     private LocalDate fechaNacimiento;
     @Column (unique = true)
-    private Long numeroDocIdentidad;
+    private String numeroDocIdentidad;
     @Column
     private String lugarExpDocIdentidad;
 
@@ -62,7 +62,7 @@ public class Empleado {
     @JoinColumn(name = "empleado_tipoDocIdentidad_id")
     private TipoDocIdentidad tipoDocIdentidad;
 
-    public Empleado(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, Long numeroDocIdentidad, String lugarExpDocIdentidad, String correoElectronico, String contrasena, String numeroCelular, Departamento departamento, NivelEscolaridad nivelEscolaridad, Sexo sexo, TipoDocIdentidad tipoDocIdentidad) {
+    public Empleado(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, String numeroDocIdentidad, String lugarExpDocIdentidad, String correoElectronico, String contrasena, String numeroCelular, Departamento departamento, NivelEscolaridad nivelEscolaridad, Sexo sexo, TipoDocIdentidad tipoDocIdentidad) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.primerApellido = primerApellido;

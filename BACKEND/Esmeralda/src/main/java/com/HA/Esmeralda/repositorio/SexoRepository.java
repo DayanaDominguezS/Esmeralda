@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public interface SexoRepository extends JpaRepository<Sexo, Long> {
 
-    Optional<Sexo> getByNombreNivelEscolaridad(String nombreNivelEscolaridad);
+    Optional<Sexo> getByNombreSexo(String nombreSexo);
 
     @Modifying
     @Transactional
-    void deleteByNombreNivelEscolaridad(String nombreNivelEscolaridad);
+    void deleteByNombreSexo(String nombreSexo);
 
 }

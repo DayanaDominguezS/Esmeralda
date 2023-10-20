@@ -1,5 +1,6 @@
 package com.HA.Esmeralda.controlador;
 
+import com.HA.Esmeralda.dto.NivelEscolaridadDto;
 import com.HA.Esmeralda.dto.SexoDto;
 import com.HA.Esmeralda.servicio.SexoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,11 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,4 +40,16 @@ public class SexoControlador {
         return response;
     }
 
+    @GetMapping("/listarTodos")
+    @Operation(summary = "Obtener todos los sexos")
+    public ResponseEntity<List<SexoDto>> listarTodos() {
+        return ResponseEntity.ok(sexoServicio.listarTodos());
+    }
+
+    @DeleteMapping("/eliminar/{sexo}")
+    @Operation(summary = "Eliminar sexo por su nombre")
+    public ResponseEntity<String> eliminarSexo(@PathVariable String sexo) {
+        return sexoServicio.eliminarSexo(sexo).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
 }

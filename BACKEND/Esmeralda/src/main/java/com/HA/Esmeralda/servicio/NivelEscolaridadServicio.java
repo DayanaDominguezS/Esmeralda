@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -39,4 +41,26 @@ public class NivelEscolaridadServicio {
 
         }
 
+    public List<NivelEscolaridadDto> listarTodos(){
+
+        List<NivelEscolaridadDto> nivelEscolaridadDtoList = new ArrayList<>();
+        List<NivelEscolaridad> nivelEscolaridadList = nivelEscolaridadRepository.findAll();
+
+        for (NivelEscolaridad nivelEscolaridad:nivelEscolaridadList){
+            NivelEscolaridadDto nivelEscolaridadDto = mapper.convertValue(nivelEscolaridad, NivelEscolaridadDto.class);
+            nivelEscolaridadDtoList.add(nivelEscolaridadDto);
+        }
+        return nivelEscolaridadDtoList;
     }
+
+    public Optional<String> eliminarNivelEscolaridad (String nivelEscolaridad) {
+        Optional<String> mensajeEliminarNivelEscolaridad = null;
+        nivelEscolaridadRepository.deleteByNombreNivelEscolaridad(nivelEscolaridad);
+        mensajeEliminarNivelEscolaridad = Optional.of(
+                "El nivel de escolaridad: " + nivelEscolaridad + " Se ha eliminado exitosamente");
+
+        return mensajeEliminarNivelEscolaridad;
+
+    }
+
+}

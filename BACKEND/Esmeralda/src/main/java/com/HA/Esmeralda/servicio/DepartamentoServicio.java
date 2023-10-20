@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -33,6 +35,28 @@ public class DepartamentoServicio {
                         + " Se ha creado exitosamente");
 
         return mensajeCrearDepartamento;
+
+    }
+
+    public List<DepartamentoDto> listarTodos(){
+
+        List<DepartamentoDto> departamentoDtoList = new ArrayList<>();
+        List<Departamento> departamentoList = departamentoRepository.findAll();
+
+        for (Departamento departamento:departamentoList){
+            DepartamentoDto departamentoDto = mapper.convertValue(departamento, DepartamentoDto.class);
+            departamentoDtoList.add(departamentoDto);
+        }
+        return departamentoDtoList;
+    }
+
+    public Optional<String> eliminarDepartamento (String nombreDepartamento) {
+        Optional<String> mensajeEliminarDepartamento = null;
+        departamentoRepository.deleteByNombreDepartamento(nombreDepartamento);
+        mensajeEliminarDepartamento = Optional.of(
+                "El departamento: " + nombreDepartamento + " Se ha eliminado exitosamente");
+
+        return mensajeEliminarDepartamento;
 
     }
 

@@ -1,6 +1,7 @@
 package com.HA.Esmeralda.controlador;
 
 import com.HA.Esmeralda.dto.DepartamentoDto;
+import com.HA.Esmeralda.dto.EmpleadoDto;
 import com.HA.Esmeralda.servicio.DepartamentoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,11 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,4 +40,17 @@ public class DepartamentoControlador {
         }
         return response;
     }
+    @GetMapping("/listarTodos")
+    @Operation(summary = "Obtener todos los departamentos")
+    public ResponseEntity<List<DepartamentoDto>> listarTodos() {
+        return ResponseEntity.ok(departamentoServicio.listarTodos());
+    }
+
+    @DeleteMapping("/eliminar/{departamento}")
+    @Operation(summary = "Eliminar departamento por su nombre")
+    public ResponseEntity<String> eliminarDepartamento(@PathVariable String departamento) {
+        return departamentoServicio.eliminarDepartamento(departamento).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
 }

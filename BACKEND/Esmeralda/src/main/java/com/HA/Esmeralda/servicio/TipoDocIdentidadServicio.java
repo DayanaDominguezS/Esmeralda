@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -36,6 +38,28 @@ public class TipoDocIdentidadServicio {
                         + " Se ha creado exitosamente");
 
         return mensajeCrearTipoDocIdentidad;
+
+    }
+
+    public List<TipoDocIdentidadDto> listarTodos(){
+
+        List<TipoDocIdentidadDto> tipoDocIdentidadDtoList = new ArrayList<>();
+        List<TipoDocIdentidad> tipoDocIdentidadList = tipoDocIdentidadRepository.findAll();
+
+        for (TipoDocIdentidad tipoDocIdentidad:tipoDocIdentidadList){
+            TipoDocIdentidadDto tipoDocIdentidadDto = mapper.convertValue(tipoDocIdentidad, TipoDocIdentidadDto.class);
+            tipoDocIdentidadDtoList.add(tipoDocIdentidadDto);
+        }
+        return tipoDocIdentidadDtoList;
+    }
+
+    public Optional<String> eliminarTipoDocIdentidad (String nombreDocIdentidad) {
+        Optional<String> mensajeEliminarTipoDocIdentidad = null;
+        tipoDocIdentidadRepository.deleteByNombreTipoDocIdentidad(nombreDocIdentidad); ;
+        mensajeEliminarTipoDocIdentidad = Optional.of(
+                "El tipo de documento de identidad: " + nombreDocIdentidad + " Se ha eliminado exitosamente");
+
+        return mensajeEliminarTipoDocIdentidad;
 
     }
 

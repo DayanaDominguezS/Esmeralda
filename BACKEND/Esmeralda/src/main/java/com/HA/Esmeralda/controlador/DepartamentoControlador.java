@@ -1,7 +1,6 @@
 package com.HA.Esmeralda.controlador;
 
 import com.HA.Esmeralda.dto.DepartamentoDto;
-import com.HA.Esmeralda.dto.EmpleadoDto;
 import com.HA.Esmeralda.servicio.DepartamentoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;

@@ -27,10 +27,10 @@ public class EmpleadoDto {
     private String correoElectronico;
     private String contrasena;
     private String numeroCelular;
-    private String departamento;
-    private String nivelEscolaridad;
-    private String sexo;
-    private String tipoDocIdentidad;
+    private String nombreDepartamento;
+    private String nombreNivelEscolaridad;
+    private String nombreSexo;
+    private String nombreTipoDocIdentidad;
 
 }
 

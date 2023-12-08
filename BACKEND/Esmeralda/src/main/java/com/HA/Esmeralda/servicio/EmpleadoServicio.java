@@ -35,15 +35,15 @@ public class EmpleadoServicio {
 
         Empleado empleado = mapper.convertValue(empleadoDto, Empleado.class);
 
-        empleado.setDepartamento(departamentoRepository.getByNombreDepartamento(empleadoDto.getDepartamento()).get());
-        empleado.setNivelEscolaridad(nivelEscolaridadRepository.getByNombreNivelEscolaridad(empleadoDto.getNivelEscolaridad()).get());
-        empleado.setSexo(sexoRepository.getByNombreSexo(empleadoDto.getSexo()).get());
-        empleado.setTipoDocIdentidad(tipoDocIdentidadRepository.getByNombreTipoDocIdentidad(empleadoDto.getTipoDocIdentidad()).get());
+        empleado.setDepartamento(departamentoRepository.getByNombreDepartamento(empleadoDto.getNombreDepartamento()).get());
+        empleado.setNivelEscolaridad(nivelEscolaridadRepository.getByNombreNivelEscolaridad(empleadoDto.getNombreNivelEscolaridad()).get());
+        empleado.setSexo(sexoRepository.getByNombreSexo(empleadoDto.getNombreSexo()).get());
+        empleado.setTipoDocIdentidad(tipoDocIdentidadRepository.getByNombreTipoDocIdentidad(empleadoDto.getNombreTipoDocIdentidad()).get());
 
         empleadoRepository.save(empleado);
 
         mensajeCrearEmpleado = Optional.of(
-                "El empleado con" + empleadoDto.getTipoDocIdentidad() + empleadoDto.getNumeroDocIdentidad()
+                "El empleado con " + empleadoDto.getNombreTipoDocIdentidad() + " " + empleadoDto.getNumeroDocIdentidad()
                 + " Se ha creado exitosamente");
 
         return mensajeCrearEmpleado;
@@ -58,10 +58,10 @@ public class EmpleadoServicio {
         for (Empleado empleado:empleadoList){
             EmpleadoDto empleadoDto = mapper.convertValue(empleado, EmpleadoDto.class);
 
-            empleadoDto.setDepartamento(empleado.getDepartamento().getNombreDepartamento()); ;
-            empleadoDto.setNivelEscolaridad(empleado.getNivelEscolaridad().getNombreNivelEscolaridad());
-            empleadoDto.setSexo(empleado.getSexo().getNombreSexo());
-            empleadoDto.setTipoDocIdentidad(empleado.getTipoDocIdentidad().getNombreTipoDocIdentidad());
+            empleadoDto.setNombreDepartamento((empleado.getDepartamento().getNombreDepartamento())); ;
+            empleadoDto.setNombreNivelEscolaridad((empleado.getNivelEscolaridad().getNombreNivelEscolaridad()));
+            empleadoDto.setNombreSexo((empleado.getSexo().getNombreSexo()));
+            empleadoDto.setNombreTipoDocIdentidad(empleado.getTipoDocIdentidad().getNombreTipoDocIdentidad());
 
             empleadoDtoList.add(empleadoDto);
         }

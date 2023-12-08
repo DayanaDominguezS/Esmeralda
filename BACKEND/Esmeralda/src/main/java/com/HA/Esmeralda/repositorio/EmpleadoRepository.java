@@ -1,6 +1,7 @@
 package com.HA.Esmeralda.repositorio;
 
 import com.HA.Esmeralda.domain.Empleado;
+import com.HA.Esmeralda.domain.NivelEscolaridad;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +30,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE Empleado e SET e.nivelEscolaridad = :nuevoNivelEscolaridad WHERE e.numeroDocIdentidad = :numeroDocIdentidad")
-    void actualizarNivelEscolaridad(String numeroDocIdentidad, String nuevoNivelEscolaridad);
+    void actualizarNivelEscolaridad(String numeroDocIdentidad, NivelEscolaridad nuevoNivelEscolaridad);
 
     // Puedes agregar más métodos según sea necesario para otros atributos.
 

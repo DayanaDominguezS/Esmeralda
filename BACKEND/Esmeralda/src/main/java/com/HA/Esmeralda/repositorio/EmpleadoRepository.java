@@ -32,6 +32,12 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
     @Query("UPDATE Empleado e SET e.nivelEscolaridad = :nuevoNivelEscolaridad WHERE e.numeroDocIdentidad = :numeroDocIdentidad")
     void actualizarNivelEscolaridad(String numeroDocIdentidad, NivelEscolaridad nuevoNivelEscolaridad);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Empleado e SET e.activo = :nuevoActivo WHERE e.numeroDocIdentidad = :numeroDocIdentidad")
+    void actualizarActivo(String numeroDocIdentidad, Boolean nuevoActivo);
+
+
     // Puedes agregar más métodos según sea necesario para otros atributos.
 
 

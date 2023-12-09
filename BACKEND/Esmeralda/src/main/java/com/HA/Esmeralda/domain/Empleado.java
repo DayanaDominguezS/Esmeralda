@@ -62,6 +62,9 @@ public class Empleado {
     @JoinColumn(name = "empleado_tipoDocIdentidad_id")
     private TipoDocIdentidad tipoDocIdentidad;
 
+    @Column
+    private Boolean activo = true;
+
     public Empleado(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido, LocalDate fechaNacimiento, String numeroDocIdentidad, String lugarExpDocIdentidad, String correoElectronico, String contrasena, String numeroCelular, Departamento departamento, NivelEscolaridad nivelEscolaridad, Sexo sexo, TipoDocIdentidad tipoDocIdentidad) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;

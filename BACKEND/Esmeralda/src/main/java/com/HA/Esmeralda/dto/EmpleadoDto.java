@@ -31,6 +31,7 @@ public class EmpleadoDto {
     private String nombreNivelEscolaridad;
     private String nombreSexo;
     private String nombreTipoDocIdentidad;
+    private Boolean activo;
 
 }
 

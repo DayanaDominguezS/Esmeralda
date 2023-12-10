@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/empleados")
@@ -29,16 +28,9 @@ public class EmpleadoControlador {
     @PostMapping("/guardar")
     @Operation(summary = "Guardar un empleado")
     public ResponseEntity<String> guardarEmpleado(@RequestBody EmpleadoDto empleadoDto) throws DuplicadoException {
-
-        ResponseEntity<String> response = null;
-        Optional<String> mensaje = empleadoServicio.crearEmpleado(empleadoDto);
-
-        if (empleadoDto!=null) {
-            response = ResponseEntity.ok(mensaje.get());
-        } else {
-            response = ResponseEntity.internalServerError().build();
-        }
-        return response;
+        return empleadoServicio.crearEmpleado(empleadoDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.internalServerError().build());
     }
 
     @GetMapping("/listarTodos")
@@ -47,9 +39,9 @@ public class EmpleadoControlador {
         return ResponseEntity.ok(empleadoServicio.listarTodos());
     }
 
-    @GetMapping("/listarPorDocIdentidad/{docIdentidad}")
+    @GetMapping("/obtenerPorDocIdentidad/{docIdentidad}")
     @Operation(summary = "Listar empleado por numero de documento de identidad")
-    public ResponseEntity<EmpleadoDto> listarEmpleadoDocIdentidad(@PathVariable String docIdentidad) throws RecursoNoEncontradoException {
+    public ResponseEntity<EmpleadoDto> obtenerEmpleadoDocIdentidad(@PathVariable String docIdentidad) throws RecursoNoEncontradoException {
         return empleadoServicio.obtenerEmpleadoDocIdentidad(docIdentidad)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -59,6 +51,38 @@ public class EmpleadoControlador {
     @Operation(summary = "Eliminar un empleado por su documento de identidad")
     public ResponseEntity<String> eliminarEmpleadoPorDocIdentidad(@PathVariable String docIdentidad) throws RecursoNoEncontradoException {
         return empleadoServicio.eliminarEmpleado(docIdentidad).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/actualizarContrasena/{numDocIdentidad}/{nuevaContrasena}")
+    @Operation(summary = "Actualizar contrasena del empleado segun su numero de documento identidad")
+    public ResponseEntity<String> actualizarContrasena(@PathVariable String numDocIdentidad, @PathVariable String nuevaContrasena) throws RecursoNoEncontradoException {
+        return empleadoServicio.actualizarContrasena(numDocIdentidad,nuevaContrasena)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/actualizarCelular/{numDocIdentidad}/{numCelular}")
+    @Operation(summary = "Actualizar numero celular del empleado segun su numero de documento identidad")
+    public ResponseEntity<String> actualizarNumeroCelular(@PathVariable String numDocIdentidad, @PathVariable String numCelular) throws RecursoNoEncontradoException {
+        return empleadoServicio.actualizarNumeroCelular(numDocIdentidad,numCelular)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/actualizarNivelEscolar/{numDocIdentidad}/{nombreNivelEscolar}")
+    @Operation(summary = "Actualizar nivel de escolaridad del empleado segun su numero de documento identidad")
+    public ResponseEntity<String> actualizarNivelEscolaridad(@PathVariable String numDocIdentidad, @PathVariable String nombreNivelEscolar) throws RecursoNoEncontradoException {
+        return empleadoServicio.actualizarNivelEscolaridad(numDocIdentidad,nombreNivelEscolar)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/actualizarEstadoActivo/{numDocIdentidad}/{estadoActivo}")
+    @Operation(summary = "Actualizar el estado activo del empleado segun su numero de documento identidad")
+    public ResponseEntity<String> actualizaractivo(@PathVariable String numDocIdentidad, @PathVariable Boolean estadoActivo) throws RecursoNoEncontradoException {
+        return empleadoServicio.actualizaractivo(numDocIdentidad,estadoActivo)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }
 

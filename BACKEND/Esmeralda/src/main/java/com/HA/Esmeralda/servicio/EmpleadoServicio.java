@@ -108,44 +108,40 @@ public class EmpleadoServicio {
         return Optional.ofNullable(mensajeEliminarEmpleado);
     }
 
-    public Optional<String> actualizarContrasena(String numeroDocIdentidad, String nuevaContrasena){
+    public Optional<String> actualizarContrasena(String numeroDocIdentidad, String nuevaContrasena) throws RecursoNoEncontradoException {
         String mensaje = null;
-        if (empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad).isEmpty()){
-            mensaje = "No existe un empleado con documetno de indentidad numero: " + numeroDocIdentidad;
-        }
+        Optional<EmpleadoDto> optionalEmpleadoDto = this.obtenerEmpleadoDocIdentidad(numeroDocIdentidad);
         empleadoRepository.actualizarContrasena(numeroDocIdentidad,nuevaContrasena);
         mensaje = "Se actualizo correctamente la contrasena del empleado identificado con documento numero: " + numeroDocIdentidad;
+        log.info(mensaje);
         return Optional.of(mensaje);
     }
 
-    public Optional<String> actualizarNumeroCelular(String numeroDocIdentidad, String nuevoNumCelular){
+    public Optional<String> actualizarNumeroCelular(String numeroDocIdentidad, String nuevoNumCelular) throws RecursoNoEncontradoException {
         String mensaje = null;
-        if (empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad).isEmpty()){
-            mensaje = "No existe un empleado con documetno de indentidad numero: " + numeroDocIdentidad;
-        }
+        Optional<EmpleadoDto> optionalEmpleadoDto = this.obtenerEmpleadoDocIdentidad(numeroDocIdentidad);
         empleadoRepository.actualizarNumeroCelular(numeroDocIdentidad,nuevoNumCelular);
         mensaje = "Se actualizo correctamente el numero de celular del empleado identificado con documento numero: " + numeroDocIdentidad;
+        log.info(mensaje);
         return Optional.of(mensaje);
     }
 
-    public Optional<String> actualizarNivelEscolaridad(String numeroDocIdentidad, String nombreNivelEscolaridad){
+    public Optional<String> actualizarNivelEscolaridad(String numeroDocIdentidad, String nombreNivelEscolaridad) throws RecursoNoEncontradoException {
         String mensaje = null;
-        if (empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad).isEmpty()){
-            mensaje = "No existe un empleado con documetno de indentidad numero: " + numeroDocIdentidad;
-        }
+        Optional<EmpleadoDto> optionalEmpleadoDto = this.obtenerEmpleadoDocIdentidad(numeroDocIdentidad);
         NivelEscolaridad nuevoNivelEscolaridad = nivelEscolaridadRepository.getByNombreNivelEscolaridad(nombreNivelEscolaridad).get();
         empleadoRepository.actualizarNivelEscolaridad(numeroDocIdentidad,nuevoNivelEscolaridad);
         mensaje = "Se actualizo correctamente el nivel de escolaridad del empleado identificado con documento numero: " + numeroDocIdentidad;
+        log.info(mensaje);
         return Optional.of(mensaje);
     }
 
-    public Optional<String> actualizaractivo(String numeroDocIdentidad, Boolean nuevoActivo){
+    public Optional<String> actualizaractivo(String numeroDocIdentidad, Boolean nuevoActivo) throws RecursoNoEncontradoException {
         String mensaje = null;
-        if (empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad).isEmpty()){
-            mensaje = "No existe un empleado con documetno de indentidad numero: " + numeroDocIdentidad;
-        }
+        Optional<EmpleadoDto> optionalEmpleadoDto = this.obtenerEmpleadoDocIdentidad(numeroDocIdentidad);
         empleadoRepository.actualizarActivo(numeroDocIdentidad,nuevoActivo);
         mensaje = "Se actualizo correctamente estado activo del empleado identificado con documento numero: " + numeroDocIdentidad;
+        log.info(mensaje);
         return Optional.of(mensaje);
     }
 

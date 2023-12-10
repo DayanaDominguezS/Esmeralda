@@ -3,6 +3,8 @@ package com.HA.Esmeralda.servicio;
 import com.HA.Esmeralda.domain.Empleado;
 import com.HA.Esmeralda.domain.NivelEscolaridad;
 import com.HA.Esmeralda.dto.EmpleadoDto;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.repositorio.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +33,14 @@ public class EmpleadoServicio {
     private TipoDocIdentidadRepository tipoDocIdentidadRepository;
 
 
-    // Agregar validacion de usuario ya existente
-    public Optional<String> crearEmpleado (EmpleadoDto empleadoDto) {
-        Optional<String> mensajeCrearEmpleado = null;
+    public Optional<String> crearEmpleado (EmpleadoDto empleadoDto) throws DuplicadoException {
+        String mensajeCrearEmpleado = null;
+
+        if (empleadoRepository.getByNumeroDocIdentidad(empleadoDto.getNumeroDocIdentidad()).isPresent()){
+            mensajeCrearEmpleado = "Ya existe un empleado con documento de identidad numero: " + empleadoDto.getNumeroDocIdentidad();
+            log.error(mensajeCrearEmpleado);
+            throw new DuplicadoException(mensajeCrearEmpleado);
+        }
 
         Empleado empleado = mapper.convertValue(empleadoDto, Empleado.class);
 
@@ -44,12 +51,11 @@ public class EmpleadoServicio {
 
         empleadoRepository.save(empleado);
 
-        mensajeCrearEmpleado = Optional.of(
-                "El empleado con " + empleadoDto.getNombreTipoDocIdentidad() + " " + empleadoDto.getNumeroDocIdentidad()
-                + " Se ha creado exitosamente");
+        mensajeCrearEmpleado = "El empleado con " + empleadoDto.getNombreTipoDocIdentidad() + " " + empleadoDto.getNumeroDocIdentidad()
+                + " Se ha creado exitosamente";
 
-        return mensajeCrearEmpleado;
-
+        log.info(mensajeCrearEmpleado);
+        return Optional.ofNullable(mensajeCrearEmpleado);
     }
 
     public List<EmpleadoDto> listarTodos(){
@@ -67,27 +73,39 @@ public class EmpleadoServicio {
 
             empleadoDtoList.add(empleadoDto);
         }
+
         return empleadoDtoList;
     }
 
-    // Agregar validacion de usuario ya existente
-    public EmpleadoDto listarEmpleadoDocIdentidad(String numeroDocIdentidad){
+    public Optional<EmpleadoDto> obtenerEmpleadoDocIdentidad(String numeroDocIdentidad) throws RecursoNoEncontradoException {
         EmpleadoDto empleadoDto = null;
-        empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad);
-        return empleadoDto;
+
+        Optional<Empleado> optionalEmpleado = empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad);
+
+        if (optionalEmpleado.isEmpty()){
+            String mensaje = "No existe un empleado con documento de identidad numero: " + numeroDocIdentidad;
+            log.error(mensaje);
+            throw new RecursoNoEncontradoException(mensaje);
+        }
+
+        empleadoDto = mapper.convertValue(optionalEmpleado.get(),EmpleadoDto.class);
+
+        empleadoDto.setNombreDepartamento(optionalEmpleado.get().getDepartamento().getNombreDepartamento()); ;
+        empleadoDto.setNombreNivelEscolaridad(optionalEmpleado.get().getNivelEscolaridad().getNombreNivelEscolaridad());
+        empleadoDto.setNombreSexo(optionalEmpleado.get().getSexo().getNombreSexo());
+        empleadoDto.setNombreTipoDocIdentidad(optionalEmpleado.get().getTipoDocIdentidad().getNombreTipoDocIdentidad());
+
+        log.info("Se obtuvo exitosamente al empleado con documento de identidad numero: " + numeroDocIdentidad);
+        return Optional.ofNullable(empleadoDto);
     }
 
-    // Agregar validacion de usuario ya existente
-    public Optional<String> eliminarEmpleado (String numeroDocIdentidad) {
-        Optional<String> mensajeEliminarEmpleado = null;
+    public Optional<String> eliminarEmpleado (String numeroDocIdentidad) throws RecursoNoEncontradoException {
+        String mensajeEliminarEmpleado = null;
+        Optional<EmpleadoDto> optionalEmpleadoDto = this.obtenerEmpleadoDocIdentidad(numeroDocIdentidad);
         empleadoRepository.deleteByNumeroDocIdentidad(numeroDocIdentidad);
-        Empleado empleado = empleadoRepository.getByNumeroDocIdentidad(numeroDocIdentidad).get();
-        mensajeEliminarEmpleado = Optional.of(
-                "El empleado: " + empleado.getPrimerNombre() + empleado.getPrimerApellido()
-                        + " Se ha eliminado exitosamente");
-
-        return mensajeEliminarEmpleado;
-
+        mensajeEliminarEmpleado = "Se elimino correctamente al empleado con documento de identidad numero: " + numeroDocIdentidad;
+        log.info(mensajeEliminarEmpleado);
+        return Optional.ofNullable(mensajeEliminarEmpleado);
     }
 
     public Optional<String> actualizarContrasena(String numeroDocIdentidad, String nuevaContrasena){

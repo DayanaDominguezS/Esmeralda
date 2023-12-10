@@ -1,10 +1,11 @@
 package com.HA.Esmeralda.controlador;
 
 import com.HA.Esmeralda.dto.EmpleadoDto;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.servicio.EmpleadoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class EmpleadoControlador {
 
     @PostMapping("/guardar")
     @Operation(summary = "Guardar un empleado")
-    public ResponseEntity<String> guardarEmpleado(@RequestBody EmpleadoDto empleadoDto) {
+    public ResponseEntity<String> guardarEmpleado(@RequestBody EmpleadoDto empleadoDto) throws DuplicadoException {
 
         ResponseEntity<String> response = null;
         Optional<String> mensaje = empleadoServicio.crearEmpleado(empleadoDto);
@@ -38,7 +39,6 @@ public class EmpleadoControlador {
             response = ResponseEntity.internalServerError().build();
         }
         return response;
-
     }
 
     @GetMapping("/listarTodos")
@@ -49,13 +49,15 @@ public class EmpleadoControlador {
 
     @GetMapping("/listarPorDocIdentidad/{docIdentidad}")
     @Operation(summary = "Listar empleado por numero de documento de identidad")
-    public ResponseEntity<EmpleadoDto> listarEmpleadoDocIdentidad(@PathVariable String docIdentidad) {
-        return ResponseEntity.ok(empleadoServicio.listarEmpleadoDocIdentidad(docIdentidad));
+    public ResponseEntity<EmpleadoDto> listarEmpleadoDocIdentidad(@PathVariable String docIdentidad) throws RecursoNoEncontradoException {
+        return empleadoServicio.obtenerEmpleadoDocIdentidad(docIdentidad)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/eliminar/{docIdentidad}")
     @Operation(summary = "Eliminar un empleado por su documento de identidad")
-    public ResponseEntity<String> eliminarEmpleadoPorDocIdentidad(@PathVariable String docIdentidad) {
+    public ResponseEntity<String> eliminarEmpleadoPorDocIdentidad(@PathVariable String docIdentidad) throws RecursoNoEncontradoException {
         return empleadoServicio.eliminarEmpleado(docIdentidad).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }

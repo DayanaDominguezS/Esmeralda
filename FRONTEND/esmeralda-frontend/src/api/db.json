@@ -1,0 +1,44 @@
+{
+  "empleados": [
+    {
+      "id": "1",
+      "primerNombre": "Carlos",
+      "segundoNombre": "Alfredo",
+      "primerApellido": "Castellar",
+      "segundoApellido": "Sanchez",
+      "fechaNacimiento": "1992-01-18",
+      "numeroDocIdentidad": "1143132398",
+      "lugarExpDocIdentidad": "Barranquilla",
+      "correoElectronico": "carlos_castellar@hotmail.com",
+      "contrasena": "12345678",
+      "numeroCelular": "3003067739",
+      "nombreDepartamento": "Operaciones",
+      "nombreNivelEscolaridad": "Profesional",
+      "nombreSexo": "Masculino",
+      "nombreTipoDocIdentidad": "Cedula de ciudadania",
+      "image": "https://psicofelicidad.com/wp-content/uploads/hombre-libre-737x553.jpg",
+      "descripcion": "Ingeniero industrial especialista en logística integral, con 10 años de experiencia desarrollando e innovando procesos de transporte, planeación y logística. Actualmente se desempeña como Director de Operaciones y logística en Herrajes Andina SAS",
+      "activo": false
+    },
+    {
+      "id": "2",
+      "primerNombre": "Dayana",
+      "segundoNombre": "Patricia",
+      "primerApellido": "Dominguez",
+      "segundoApellido": "Solano",
+      "fechaNacimiento": "1992-06-29",
+      "numeroDocIdentidad": "1140856184",
+      "lugarExpDocIdentidad": "Barranquilla",
+      "correoElectronico": "dpds2906@hotmail.com",
+      "contrasena": "12345678",
+      "numeroCelular": "3043889580",
+      "nombreDepartamento": "Operaciones",
+      "nombreNivelEscolaridad": "Profesional",
+      "nombreSexo": "Masculino",
+      "nombreTipoDocIdentidad": "Cedula de ciudadania",
+      "image": "https://d1or11in5278oe.cloudfront.net/boost-your-self-confidence.jpg",
+      "descripcion": "Ingeniera industrial especialista en desarrollo humano y organizacional, con 10 años de experiencia liderando procesos de nómina, bienestar y capacitaciones del personal. Actualmente se desempeña como Jefe de Talento Humano en Herrajes Andina SAS",
+      "activo": false
+    }
+  ]
+}

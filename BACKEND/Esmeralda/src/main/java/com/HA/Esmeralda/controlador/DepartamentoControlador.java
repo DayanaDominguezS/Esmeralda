@@ -1,6 +1,8 @@
 package com.HA.Esmeralda.controlador;
 
 import com.HA.Esmeralda.dto.DepartamentoDto;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.servicio.DepartamentoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/departamentos")
@@ -27,17 +28,10 @@ public class DepartamentoControlador {
 
     @PostMapping("/guardar")
     @Operation(summary = "Guardar un departamento")
-    public ResponseEntity<String> guardarDepartamento(@RequestBody DepartamentoDto departamentoDto) {
-
-        ResponseEntity<String> response = null;
-        Optional<String> mensaje = departamentoServicio.crearDepartamento(departamentoDto);
-
-        if (departamentoDto!=null) {
-            response = ResponseEntity.ok(mensaje.get());
-        } else {
-            response = ResponseEntity.internalServerError().build();
-        }
-        return response;
+    public ResponseEntity<String> guardarDepartamento(@RequestBody DepartamentoDto departamentoDto) throws DuplicadoException {
+        return departamentoServicio.crearDepartamento(departamentoDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.internalServerError().build());
     }
     @GetMapping("/listarTodos")
     @Operation(summary = "Obtener todos los departamentos")
@@ -45,10 +39,19 @@ public class DepartamentoControlador {
         return ResponseEntity.ok(departamentoServicio.listarTodos());
     }
 
+    @GetMapping("/obtenerPorNombre/{nombreDepartamento}")
+    @Operation(summary = "Obtener departamento por nombre")
+    public ResponseEntity<DepartamentoDto> obtenerPorNombre(@PathVariable String nombreDepartamento) throws RecursoNoEncontradoException {
+        return departamentoServicio.obtenerPorNombre(nombreDepartamento)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/eliminar/{departamento}")
     @Operation(summary = "Eliminar departamento por su nombre")
-    public ResponseEntity<String> eliminarDepartamento(@PathVariable String departamento) {
-        return departamentoServicio.eliminarDepartamento(departamento).map(ResponseEntity::ok)
+    public ResponseEntity<String> eliminarDepartamento(@PathVariable String departamento) throws RecursoNoEncontradoException {
+        return departamentoServicio.eliminarDepartamento(departamento)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }
 

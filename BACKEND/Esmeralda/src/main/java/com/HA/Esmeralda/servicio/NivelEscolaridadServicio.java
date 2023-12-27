@@ -1,12 +1,9 @@
 package com.HA.Esmeralda.servicio;
 
-import com.HA.Esmeralda.domain.Departamento;
-import com.HA.Esmeralda.domain.Empleado;
 import com.HA.Esmeralda.domain.NivelEscolaridad;
-import com.HA.Esmeralda.dto.DepartamentoDto;
-import com.HA.Esmeralda.dto.EmpleadoDto;
 import com.HA.Esmeralda.dto.NivelEscolaridadDto;
-import com.HA.Esmeralda.repositorio.DepartamentoRepository;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.repositorio.NivelEscolaridadRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -27,22 +24,25 @@ public class NivelEscolaridadServicio {
     @Autowired
     private NivelEscolaridadRepository nivelEscolaridadRepository;
 
-    public Optional<String> crearNivelEscolaridad (NivelEscolaridadDto nivelEscolaridadDto) {
-            Optional<String> mensajeCrearNivelEscolaridad = null;
+    public Optional<String> crearNivelEscolaridad (NivelEscolaridadDto nivelEscolaridadDto) throws DuplicadoException {
+        String mensajeCrearNivelEscolaridad = null;
 
-        NivelEscolaridad nivelEscolaridad = mapper.convertValue(nivelEscolaridadDto, NivelEscolaridad.class);
-
-        nivelEscolaridadRepository.save(nivelEscolaridad);
-        mensajeCrearNivelEscolaridad = Optional.of(
-                    "El nivel de escolaridad " + nivelEscolaridadDto.getNombreNivelEscolaridad()
-                            + " Se ha creado exitosamente");
-
-            return mensajeCrearNivelEscolaridad;
-
+        if (nivelEscolaridadRepository.getByNombreNivelEscolaridad(nivelEscolaridadDto.getNombreNivelEscolaridad()).isPresent()){
+            mensajeCrearNivelEscolaridad = "Ya existe un nivel de escolaridad con nombre: " + nivelEscolaridadDto.getNombreNivelEscolaridad();
+            log.error(mensajeCrearNivelEscolaridad);
+            throw new DuplicadoException(mensajeCrearNivelEscolaridad);
         }
 
-    public List<NivelEscolaridadDto> listarTodos(){
+        NivelEscolaridad nivelEscolaridad = mapper.convertValue(nivelEscolaridadDto, NivelEscolaridad.class);
+        nivelEscolaridadRepository.save(nivelEscolaridad);
+        mensajeCrearNivelEscolaridad = "El nivel de escolaridad " + nivelEscolaridadDto.getNombreNivelEscolaridad()
+                            + " Se ha creado exitosamente";
 
+        log.info(mensajeCrearNivelEscolaridad);
+        return Optional.ofNullable(mensajeCrearNivelEscolaridad);
+    }
+
+    public List<NivelEscolaridadDto> listarTodos(){
         List<NivelEscolaridadDto> nivelEscolaridadDtoList = new ArrayList<>();
         List<NivelEscolaridad> nivelEscolaridadList = nivelEscolaridadRepository.findAll();
 
@@ -53,13 +53,32 @@ public class NivelEscolaridadServicio {
         return nivelEscolaridadDtoList;
     }
 
-    public Optional<String> eliminarNivelEscolaridad (String nivelEscolaridad) {
-        Optional<String> mensajeEliminarNivelEscolaridad = null;
-        nivelEscolaridadRepository.deleteByNombreNivelEscolaridad(nivelEscolaridad);
-        mensajeEliminarNivelEscolaridad = Optional.of(
-                "El nivel de escolaridad: " + nivelEscolaridad + " Se ha eliminado exitosamente");
+    public Optional<NivelEscolaridadDto> obtenerPorNombre(String nombreNivel) throws RecursoNoEncontradoException {
+        NivelEscolaridadDto nivelEscolaridadDto = null;
+        Optional<NivelEscolaridad> optionalNivelEscolaridad = nivelEscolaridadRepository.getByNombreNivelEscolaridad(nombreNivel);
 
-        return mensajeEliminarNivelEscolaridad;
+        if (optionalNivelEscolaridad.isEmpty()){
+            String mensaje = "No existe un nivel de escolaridad con nombre " + nombreNivel;
+            log.error(mensaje);
+            throw new RecursoNoEncontradoException(mensaje);
+        }
+
+        nivelEscolaridadDto = mapper.convertValue(optionalNivelEscolaridad.get(),NivelEscolaridadDto.class);
+
+        log.info("Se obtuvo exitosamente el nivel de escolaridad con nombre: " + nombreNivel);
+        return Optional.ofNullable(nivelEscolaridadDto);
+    }
+
+    public Optional<String> eliminarNivelEscolaridad (String nombreNivelEscolar) throws RecursoNoEncontradoException {
+        String mensajeEliminarNivelEscolaridad = null;
+
+        if (this.obtenerPorNombre(nombreNivelEscolar).isPresent()){
+            nivelEscolaridadRepository.deleteByNombreNivelEscolaridad(nombreNivelEscolar);
+        }
+
+        mensajeEliminarNivelEscolaridad = "El nivel de escolaridad: " + nombreNivelEscolar + " se ha eliminado exitosamente";
+        log.info(mensajeEliminarNivelEscolaridad);
+        return Optional.ofNullable(mensajeEliminarNivelEscolaridad);
 
     }
 

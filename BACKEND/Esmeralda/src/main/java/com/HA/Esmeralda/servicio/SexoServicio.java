@@ -1,14 +1,9 @@
 package com.HA.Esmeralda.servicio;
 
-import com.HA.Esmeralda.domain.Departamento;
-import com.HA.Esmeralda.domain.Empleado;
-import com.HA.Esmeralda.domain.NivelEscolaridad;
 import com.HA.Esmeralda.domain.Sexo;
-import com.HA.Esmeralda.dto.DepartamentoDto;
-import com.HA.Esmeralda.dto.EmpleadoDto;
-import com.HA.Esmeralda.dto.NivelEscolaridadDto;
 import com.HA.Esmeralda.dto.SexoDto;
-import com.HA.Esmeralda.repositorio.DepartamentoRepository;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.repositorio.SexoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -29,22 +24,24 @@ public class SexoServicio {
     @Autowired
     private SexoRepository sexoRepository;
 
-    public Optional<String> crearSexo (SexoDto sexoDto) {
-        Optional<String> mensajeCrearSexo = null;
+    public Optional<String> crearSexo(SexoDto sexoDto) throws DuplicadoException {
+        String mensajeCrearSexo = null;
+
+        if (sexoRepository.getByNombreSexo(sexoDto.getNombreSexo()).isPresent()){
+            mensajeCrearSexo = "Ya existe un sexo con nombre: " + sexoDto.getNombreSexo();
+            log.error(mensajeCrearSexo);
+            throw new DuplicadoException(mensajeCrearSexo);
+        }
 
         Sexo sexo = mapper.convertValue(sexoDto, Sexo.class);
-
         sexoRepository.save(sexo);
-        mensajeCrearSexo = Optional.of(
-                "El sexo " + sexoDto.getNombreSexo()
-                        + " Se ha creado exitosamente");
+        mensajeCrearSexo = "El sexo " + sexoDto.getNombreSexo() + " se ha creado exitosamente";
 
-        return mensajeCrearSexo;
-
+        log.info(mensajeCrearSexo);
+        return Optional.ofNullable(mensajeCrearSexo);
     }
 
     public List<SexoDto> listarTodos(){
-
         List<SexoDto> sexoDtoList = new ArrayList<>();
         List<Sexo> sexoList = sexoRepository.findAll();
 
@@ -55,14 +52,32 @@ public class SexoServicio {
         return sexoDtoList;
     }
 
-    public Optional<String> eliminarSexo (String nombreSexo) {
-        Optional<String> mensajeEliminarSexo = null;
-        sexoRepository.deleteByNombreSexo(nombreSexo);
-        mensajeEliminarSexo = Optional.of(
-                "El sexo: " + nombreSexo + " Se ha eliminado exitosamente");
+    public Optional<SexoDto> obtenerPorNombre(String nombreSexo) throws RecursoNoEncontradoException {
+        SexoDto sexoDto = null;
+        Optional<Sexo> optionalSexo = sexoRepository.getByNombreSexo(nombreSexo);
 
-        return mensajeEliminarSexo;
+        if (optionalSexo.isEmpty()){
+            String mensaje = "No existe un sexo con nombre: " + nombreSexo;
+            log.error(mensaje);
+            throw new RecursoNoEncontradoException(mensaje);
+        }
 
+        sexoDto = mapper.convertValue(optionalSexo.get(), SexoDto.class);
+
+        log.info("Se obtuvo exitosamente el sexo con nombre: " + nombreSexo);
+        return Optional.ofNullable(sexoDto);
+    }
+
+    public Optional<String> eliminarSexo (String nombreSexo) throws RecursoNoEncontradoException {
+        String mensajeEliminarSexo = null;
+
+        if (this.obtenerPorNombre(nombreSexo).isPresent()){
+            sexoRepository.deleteByNombreSexo(nombreSexo);
+        }
+
+        mensajeEliminarSexo = "El sexo: " + nombreSexo + " se ha eliminado exitosamente";
+        log.info(mensajeEliminarSexo);
+        return Optional.ofNullable(mensajeEliminarSexo);
     }
 
 }

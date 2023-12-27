@@ -1,7 +1,8 @@
 package com.HA.Esmeralda.controlador;
 
-import com.HA.Esmeralda.dto.SexoDto;
 import com.HA.Esmeralda.dto.TipoDocIdentidadDto;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.servicio.TipoDocIdentidadServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/tiposDocIdentidad")
@@ -27,17 +27,10 @@ public class TipoDocIdentidadControlador {
 
     @PostMapping("/guardar")
     @Operation(summary = "Guardar un tipo de documento de identidad")
-    public ResponseEntity<String> guardarTipoDocIdentidad(@RequestBody TipoDocIdentidadDto tipoDocIdentidadDto) {
-
-        ResponseEntity<String> response = null;
-        Optional<String> mensaje = tipoDocIdentidadServicio.crearTipoDocIdentidad(tipoDocIdentidadDto);
-
-        if (tipoDocIdentidadDto!=null) {
-            response = ResponseEntity.ok(mensaje.get());
-        } else {
-            response = ResponseEntity.internalServerError().build();
-        }
-        return response;
+    public ResponseEntity<String> guardarTipoDocIdentidad(@RequestBody TipoDocIdentidadDto tipoDocIdentidadDto) throws DuplicadoException {
+        return tipoDocIdentidadServicio.crearTipoDocIdentidad(tipoDocIdentidadDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.internalServerError().build());
     }
 
     @GetMapping("/listarTodos")
@@ -46,10 +39,19 @@ public class TipoDocIdentidadControlador {
         return ResponseEntity.ok(tipoDocIdentidadServicio.listarTodos());
     }
 
+    @GetMapping("/obtenerPorNombre/{nombreTipoDoc}")
+    @Operation(summary = "Obtener tipo documento identidad por nombre")
+    public ResponseEntity<TipoDocIdentidadDto> obtenerPorNombre(@PathVariable String nombreTipoDoc) throws RecursoNoEncontradoException {
+        return tipoDocIdentidadServicio.obtenerPorNombre(nombreTipoDoc)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/eliminar/{tipoDocIdentidad}")
     @Operation(summary = "Eliminar tipo de documento de identidad por su nombre")
-    public ResponseEntity<String> eliminarTipoDocIdentidad(@PathVariable String tipoDocIdentidad) {
-        return tipoDocIdentidadServicio.eliminarTipoDocIdentidad(tipoDocIdentidad).map(ResponseEntity::ok)
+    public ResponseEntity<String> eliminarTipoDocIdentidad(@PathVariable String tipoDocIdentidad) throws RecursoNoEncontradoException {
+        return tipoDocIdentidadServicio.eliminarTipoDocIdentidad(tipoDocIdentidad)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }
 

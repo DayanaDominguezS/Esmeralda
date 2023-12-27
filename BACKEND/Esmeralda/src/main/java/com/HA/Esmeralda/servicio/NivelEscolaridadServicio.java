@@ -79,7 +79,6 @@ public class NivelEscolaridadServicio {
         mensajeEliminarNivelEscolaridad = "El nivel de escolaridad: " + nombreNivelEscolar + " se ha eliminado exitosamente";
         log.info(mensajeEliminarNivelEscolaridad);
         return Optional.ofNullable(mensajeEliminarNivelEscolaridad);
-
     }
 
 }

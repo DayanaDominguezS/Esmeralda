@@ -1,9 +1,9 @@
 package com.HA.Esmeralda.servicio;
 
 import com.HA.Esmeralda.domain.Departamento;
-import com.HA.Esmeralda.domain.Empleado;
 import com.HA.Esmeralda.dto.DepartamentoDto;
-import com.HA.Esmeralda.dto.EmpleadoDto;
+import com.HA.Esmeralda.exceptions.DuplicadoException;
+import com.HA.Esmeralda.exceptions.RecursoNoEncontradoException;
 import com.HA.Esmeralda.repositorio.DepartamentoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -24,22 +24,25 @@ public class DepartamentoServicio {
     @Autowired
     private DepartamentoRepository departamentoRepository;
 
-    public Optional<String> crearDepartamento (DepartamentoDto departamentoDto) {
-        Optional<String> mensajeCrearDepartamento = null;
+    public Optional<String> crearDepartamento (DepartamentoDto departamentoDto) throws DuplicadoException {
+        String mensajeCrearDepartamento = null;
+
+        if (departamentoRepository.getByNombreDepartamento(departamentoDto.getNombreDepartamento()).isPresent()){
+            mensajeCrearDepartamento = "Ya existe un departamento creado con el nombre: " + departamentoDto.getNombreDepartamento();
+            log.error(mensajeCrearDepartamento);
+            throw new DuplicadoException(mensajeCrearDepartamento);
+        }
 
         Departamento departamento = mapper.convertValue(departamentoDto, Departamento.class);
-
         departamentoRepository.save(departamento);
-        mensajeCrearDepartamento = Optional.of(
-                "El departamento " + departamentoDto.getNombreDepartamento()
-                        + " Se ha creado exitosamente");
+        mensajeCrearDepartamento = "El departamento " + departamentoDto.getNombreDepartamento() + " se ha creado exitosamente!";
 
-        return mensajeCrearDepartamento;
+        log.info(mensajeCrearDepartamento);
+        return Optional.ofNullable(mensajeCrearDepartamento);
 
     }
 
     public List<DepartamentoDto> listarTodos(){
-
         List<DepartamentoDto> departamentoDtoList = new ArrayList<>();
         List<Departamento> departamentoList = departamentoRepository.findAll();
 
@@ -47,17 +50,37 @@ public class DepartamentoServicio {
             DepartamentoDto departamentoDto = mapper.convertValue(departamento, DepartamentoDto.class);
             departamentoDtoList.add(departamentoDto);
         }
+
         return departamentoDtoList;
     }
 
-    public Optional<String> eliminarDepartamento (String nombreDepartamento) {
-        Optional<String> mensajeEliminarDepartamento = null;
-        departamentoRepository.deleteByNombreDepartamento(nombreDepartamento);
-        mensajeEliminarDepartamento = Optional.of(
-                "El departamento: " + nombreDepartamento + " Se ha eliminado exitosamente");
+    public Optional<DepartamentoDto> obtenerPorNombre(String nombreDepartamento) throws RecursoNoEncontradoException {
+        DepartamentoDto departamentoDto = null;
+        Optional<Departamento> optionalDepartamento = departamentoRepository.getByNombreDepartamento(nombreDepartamento);
 
-        return mensajeEliminarDepartamento;
+        if (optionalDepartamento.isEmpty()){
+            String mensaje = "No existe un departamento con nombre " + nombreDepartamento;
+            log.error(mensaje);
+            throw new RecursoNoEncontradoException(mensaje);
+        }
 
+        departamentoDto = mapper.convertValue(optionalDepartamento.get(),DepartamentoDto.class);
+
+        log.info("Se obtuvo exitosamente el departamento con nombre: " + nombreDepartamento);
+        return Optional.ofNullable(departamentoDto);
+    }
+
+
+    public Optional<String> eliminarDepartamento (String nombreDepartamento) throws RecursoNoEncontradoException {
+        String mensajeEliminarDepartamento = null;
+
+        if (this.obtenerPorNombre(nombreDepartamento).isPresent()){
+            departamentoRepository.deleteByNombreDepartamento(nombreDepartamento);
+        }
+
+        mensajeEliminarDepartamento = "Se ha eliminado exitosamente el departamente con nombre: " + nombreDepartamento;
+        log.info(mensajeEliminarDepartamento);
+        return Optional.ofNullable(mensajeEliminarDepartamento);
     }
 
 }

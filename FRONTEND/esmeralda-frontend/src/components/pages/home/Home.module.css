@@ -8,3 +8,9 @@
     gap: 30px;
     flex-wrap: wrap;
 }
+
+.containerCrearEmpleado {
+    background-color: #104070;
+    width: 100%;
+    height: auto;
+}

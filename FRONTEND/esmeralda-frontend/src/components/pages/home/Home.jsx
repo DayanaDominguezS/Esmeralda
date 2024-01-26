@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import CardInformation from '../../common/card/CardInformation';
-import styles from '../home/Home.module.css'
+import style from './Home.module.css'
 import Header from '../../common/header/Header';
 import { Button } from '@mui/material';
 import CreateEmpleadoModal from '../../common/createEmpleadoModal/CreateEmpleadoModal';
@@ -34,9 +34,11 @@ const Home = () => {
   return (
     <>
     <header><Header/></header>
+    <div className={style.containerCrearEmpleado}>
     <Button onClick={handleOpen}>Crear empleado</Button>
+    </div>
     <CreateEmpleadoModal open={open} handleClose={handleClose}/>
-      <div className={styles.containerCards}>
+      <div className={style.containerCards}>
         {
           empleados.map( (empleado) => {
             return ( 

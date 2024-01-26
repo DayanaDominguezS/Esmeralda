@@ -17,7 +17,7 @@ const CardInformation = ({empleado, handleActivo}) => {
   const letraAvatar2 = empleado.segundoApellido.charAt(0)
 
   return (
-    <Card sx={{ width: 300, height: 600 }}>
+    <Card sx={{ width: 300, height: 400 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -43,10 +43,7 @@ const CardInformation = ({empleado, handleActivo}) => {
       </CardActions>
         <CardContent>
           <Typography paragraph>
-            Reseña
-          </Typography>
-          <Typography paragraph>
-            {empleado.descripcion}
+            {empleado.nombreDepartamento}
           </Typography>
         </CardContent>
     </Card>

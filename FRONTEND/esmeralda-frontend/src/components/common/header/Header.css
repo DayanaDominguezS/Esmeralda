@@ -1,0 +1,29 @@
+.headerContainer{
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+.logoContainer{
+    background-color: #ffffff;
+    width: 25%;
+    height: 100%;
+}
+
+.logoHA{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.buttonsContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 25%;
+    padding-right: 1%;
+}

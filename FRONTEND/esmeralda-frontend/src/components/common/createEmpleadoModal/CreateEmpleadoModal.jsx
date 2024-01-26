@@ -1,16 +1,5 @@
 import { Box, Modal, TextField} from '@mui/material'
-import styleEmpleado from "../createEmpleadoModal/Create.empleado.css"
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
+import "./Create.empleado.css"
 
 const CreateEmpleadoModal = ({open, handleClose}) => {
   
@@ -22,12 +11,20 @@ const CreateEmpleadoModal = ({open, handleClose}) => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <form className={styleEmpleado.createEmpleado}>
-                <TextField id="outlined-basic" label="Outlined" variant="outlined" fullWidth/>
-                <TextField id="outlined-basic" label="Outlined" variant="outlined" fullWidth/>
-                <TextField id="outlined-basic" label="Outlined" variant="outlined" fullWidth/>
-                <TextField id="outlined-basic" label="Outlined" variant="outlined" fullWidth/>
+          <Box className="style" >
+            <h1>CREAR EMPLEADO</h1>
+            <form className="boxCreateEmpleado">
+                <TextField id="outlined-basic" label="Primer nombre" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Segundo nombre" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Primer apellido" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Segundo apellido" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Fecha de nacimiento" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Documento de identidad" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Lugar de expedición del documento de identidad" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Correo electrónico" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Contraseña" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Celular" variant="outlined" fullWidth/>
+                <TextField id="outlined-basic" label="Celular" variant="outlined" fullWidth/>
             </form>
           </Box>
         </Modal>
